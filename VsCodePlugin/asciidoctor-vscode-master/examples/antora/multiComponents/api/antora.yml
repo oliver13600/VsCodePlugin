@@ -1,0 +1,10 @@
+name: "api"
+version: "1.0"
+title: Antora
+asciidoc:
+  attributes:
+    source-language: asciidoc@
+    xrefstyle: short@
+    example-caption: false
+    experimental: ''
+    url-vscode-marketplace: https://marketplace.visualstudio.com/vscode

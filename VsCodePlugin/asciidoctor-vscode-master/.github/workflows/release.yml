@@ -1,0 +1,33 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      release-version:
+        description: Enter version to release (e.g., 2.0.1).
+        required: true
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'asciidoctor' && github.event_name == 'workflow_dispatch'
+    steps:
+      - run: echo ok go
+  perform:
+    needs: activate
+    runs-on: ubuntu-latest
+    environment: releases
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
+      - name: Setup release environment
+        run: |
+          echo ${{ secrets[format('GH_TOKEN_{0}', github.actor)] }} | gh auth login --with-token
+          echo RELEASE_VERSION=${{ github.event.inputs.release-version }} >> $GITHUB_ENV
+          echo RELEASE_VSCE_TOKEN=${{ secrets['VSCE_TOKEN'] }} >> $GITHUB_ENV
+      - name: Build, tag, and publish extension
+        run: ./release.sh

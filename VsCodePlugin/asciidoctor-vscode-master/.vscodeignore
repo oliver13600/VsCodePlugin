@@ -1,0 +1,14 @@
+**/*
+!images/icon.png
+!dist/
+!res/
+!syntaxes/
+!snippets/
+!media/
+!node_modules/
+!package.json
+!package.nls*.json
+!en.json
+!*.md
+!asciidoc-language-configuration.json
+!LICENSE
