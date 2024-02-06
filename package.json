@@ -27,8 +27,21 @@
       {
         "command": "asciidocextension.createModule",
         "title": "Create Module"
+      },
+      {
+        "command": "asciidocextension.createSpecificAdocFile",
+        "title": "Create Specific AsciiDoc File"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+          {
+              "when": "resourceIsFolder",
+              "command": "asciidocextension.createSpecificAdocFile",
+              "group": "navigation"
+          }
+      ]
+  }
   },
   
   "scripts": {

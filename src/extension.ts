@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+
 import {CreateModulePanel} from "./webview/CreateModulePanel";
 
 const fs = require('fs');
@@ -81,7 +82,7 @@ export function activate(context: vscode.ExtensionContext) {
         // Placeholder for the logic 
         // Implement table detection and editing logic here
 
-        vscode.window.showInformationMessage('AsciiDoc table editing functionality is not yet implemented. Test');
+        vscode.window.showInformationMessage('AsciiDoc table editing functionality is not yet implemented.');
 
     });
 
@@ -97,6 +98,45 @@ export function activate(context: vscode.ExtensionContext) {
         CreateModulePanel.render(context.extensionUri);
     });
     context.subscriptions.push(createModuleDisposable);
+
+
+    let createSpecificAdocFileDisposable = vscode.commands.registerCommand('asciidocextension.createSpecificAdocFile', (folderUri: vscode.Uri) => {
+        // The folderUri is the URI of the folder that was right-clicked by the user
+        
+        const fileName = 'SpecificFile.adoc'; // The name of your specific AsciiDoc file
+        if (!folderUri) {
+            vscode.window.showErrorMessage("No folder selected.");
+            return;
+        }
+
+        const filePath = path.join(folderUri.fsPath, fileName);
+        const fileContent = `= Your New AsciiDoc File
+:doctype: article
+:toc: 
+:icons: font
+
+== Introduction
+Your content here...`;
+
+        fs.writeFile(filePath, fileContent, err => {
+            if (err) {
+                vscode.window.showErrorMessage(`Failed to create AsciiDoc file: ${err}`);
+                return;
+            }
+
+            vscode.window.showInformationMessage(`AsciiDoc file '${fileName}' has been created successfully.`);
+            
+            // Optionally open the created file in editor
+            vscode.workspace.openTextDocument(filePath).then(doc => {
+                vscode.window.showTextDocument(doc);
+            });
+        });
+    });
+
+    context.subscriptions.push(createSpecificAdocFileDisposable);
+
+
+
 }
 
 
